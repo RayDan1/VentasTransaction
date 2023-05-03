@@ -39,5 +39,45 @@ namespace AccesoDatos
                 cmd.ExecuteNonQuery();
             }
         }
+        public void AgregarExistencia(int ProductoId, decimal Cantidad)
+        //SqlConnection con, SqlTransaction transaction, VentaDetalle concepto
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(Conexion.ConnectionString))
+                {
+                    SqlTransaction transaction;
+                    con.Open();
+                    transaction = con.BeginTransaction();
+                    try
+                    {
+                        string query = "Update Existencias " +
+                                       "set Existencia = Existencia + @Cantidad " +
+                                       "where ProductoId = @ProductoId";
+
+                        using (SqlCommand cmd = new SqlCommand(query, con))
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            cmd.Transaction = transaction;
+
+                            cmd.Parameters.AddWithValue("@ProductoId", ProductoId);
+                            cmd.Parameters.AddWithValue("@Cantidad", Cantidad);
+                            cmd.ExecuteNonQuery();
+                        }
+                        transaction.Commit();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception(ex.Message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

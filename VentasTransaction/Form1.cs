@@ -16,6 +16,9 @@ namespace VentasTransaction
         private void button1_Click(object sender, EventArgs e)
         {
             GuardarVenta();
+            AgregarCliente();
+            EliminarP();
+            AgregarExistenciaP();
         }
 
         //Debemos reubicar este metodo 
@@ -55,6 +58,35 @@ namespace VentasTransaction
 
                 MessageBox.Show($"Ocurrio un error al guardar la venta {ex.Message}");
             }
+        }
+
+        private void AgregarCliente()
+        {
+            Cliente clienteN = new Cliente();
+            clienteN.Id = 1;
+            clienteN.Nombre = "Ray";
+            clienteN.AgregarCliente(clienteN);
+
+            Cliente cliente2 = new Cliente();
+            cliente2.Id = 1;
+            cliente2.Nombre = "Sebas";
+            cliente2.AgregarCliente(cliente2);
+
+        }
+
+        private void EliminarP()
+        {
+            Producto eliminarP= new Producto();
+            eliminarP.Id = 5;
+            eliminarP.Descripcion = "Cacahuates";
+        }
+
+        private void AgregarExistenciaP()
+        {
+            Producto producto_6 = new Producto();
+            producto_6.Descripcion = "Harina Kg";
+            producto_6.PrecioUnitario = 30;
+            producto_6.Guardar(producto_6);
         }
     }
 }
