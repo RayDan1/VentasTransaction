@@ -88,6 +88,8 @@ namespace VentasTransaction
             producto_6.PrecioUnitario = 30;
             producto_6.Guardar(producto_6);
         }
+
+       
     }
 }
 
