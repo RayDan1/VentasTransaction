@@ -1,12 +1,7 @@
 ﻿using AccesoDatos;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace VentasTransaction
@@ -18,34 +13,49 @@ namespace VentasTransaction
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Conexion.ConnectionString);
-            Venta venta= new Venta();
-            venta.ClienteId = 1;
-            venta.Fecha = DateTime.Now;
-            
-            VentaDetalle producto1 = new VentaDetalle();
-            producto1.ProductoId = 1;
-            producto1.Cantidad = 1;
-            producto1.Descripcion = "Azucar kg";
-            producto1.PrecioUnitario = 27.00m;
-            producto1.Importe = producto1.Cantidad * producto1.PrecioUnitario;
+            GuardarVenta();
+        }
 
-            VentaDetalle producto2 = new VentaDetalle();
-            producto2.ProductoId = 2;
-            producto2.Cantidad = 1;
-            producto2.Descripcion = "Jugo Mango";
-            producto2.PrecioUnitario = 10.00m;
-            producto2.Importe = producto2.Cantidad * producto2.PrecioUnitario;
+        //Debemos reubicar este metodo 
+        private void GuardarVenta()
+        {
+            try
+            {
+                Venta venta = new Venta();
+                venta.CLienteId = 1;
 
-            venta.Conceptos.Add(producto1);
-            venta.Conceptos.Add(producto2);
+
+                VentaDetalle producto1 = new VentaDetalle();
+                producto1.ProductoId = 1;
+                producto1.Cantidad = 1;
+                producto1.Descripcion = "Azucar kg";
+                producto1.PrecioUnitario = 27.00m;
+                producto1.Importe = producto1.Cantidad * producto1.PrecioUnitario;
+
+                venta.Total += producto1.Importe;
+
+                VentaDetalle producto2 = new VentaDetalle();
+                producto2.ProductoId = 2;
+                producto2.Cantidad = 1;
+                producto2.Descripcion = "Jugo Mango";
+                producto2.PrecioUnitario = 10.00m;
+                producto2.Importe = producto2.Cantidad * producto2.PrecioUnitario;
+
+                venta.Total += producto2.Importe;
+
+                venta.Conceptos.Add(producto1);
+                venta.Conceptos.Add(producto2);
+
+                venta.GuardarVenta(venta);
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show($"Ocurrio un error al guardar la venta {ex.Message}");
+            }
         }
     }
 }
+
